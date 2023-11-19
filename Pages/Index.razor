@@ -1,0 +1,41 @@
+﻿@page "/"
+@using BlazorApp1.Models;
+@using BlazorApp1.Services;
+@inject CustomerService customerService;
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+
+<EditForm Model=@customer OnValidSubmit="HandleSubmit">
+	<label for="NameInput">Name</label>
+	<InputText id="NameInput" @bind-Value ="@customer.Name"></InputText>
+
+	<label for="AgeInput">Age</label>
+	<InputNumber id="AgeInput" @bind-Value="@customer.Age"></InputNumber>
+	<button type="submit" class="btn-primary">Create</button>
+	<button type="submit" class="btn-primary" onclick="UpdateCustomer">Update</button>
+</EditForm>
+@code{
+	Customer customer = new Customer();   
+
+	public void HandleSubmit(EditContext editContext)
+	{
+		var newCustomer = (Customer)editContext.Model;
+		newCustomer.CreatedDate = DateTime.Now;
+		customerService.AddCustomer(newCustomer);
+
+	}
+
+	public void UpdateCustomer(EditContext editContext)
+	{
+		var newCustomer = (Customer)editContext.Model;
+		newCustomer.CreatedDate = DateTime.Now;
+		
+		customerService.UpdateCustomerByName("rashmi", 25);
+	}
+}
